@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Rohan 🤖💖</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #ffd1dc, #ffe4ec, #e0f7ff);
+    min-height: 100vh;
+  }
+  .page {
+    display: none;
+    min-height: 100vh;
+    padding: 40px 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    animation: fadeIn 1s ease;
+    position: relative;
+  }
+  .page.active { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: translateY(0);} }
+
+  /* Floating hearts/balloons background */
+  .float-emoji {
+    position: fixed;
+    font-size: 28px;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.7;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+  }
+
+  h1 {
+    font-size: 2.2em;
+    color: #e91e63;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 8px rgba(255,192,203,0.8);
+    animation: bounceIn 1s ease;
+  }
+  @keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  p { font-size: 1.15em; color: #555; margin: 12px 0; max-width: 600px; line-height: 1.6; }
+  .btn {
+    padding: 14px 34px;
+    margin: 12px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+  .btn-yes {
+    background: linear-gradient(135deg, #ff6fa5, #ff4081);
+    color: white;
+  }
+  .btn-no {
+    background: linear-gradient(135deg, #cfd8dc, #90a4ae);
+    color: white;
+  }
+  .btn:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+  .btn-row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+
+  /* Envelope opening */
+  .gift-open { font-size: 6em; animation: pulse 1.5s infinite; }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  /* Photo frames */
+  .photo-frame {
+    background: white;
+    padding: 12px 12px 40px 12px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    margin: 20px 12px;
+    display: inline-block;
+    transition: transform 0.4s ease;
+    position: relative;
+  }
+  .photo-frame:hover { transform: rotate(2deg) scale(1.03); }
+  .photo-frame::after {
+    content: attr(data-caption);
+    position: absolute;
+    bottom: 10px;
+    left: 0; right: 0;
+    font-size: 0.85em;
+    color: #e91e63;
+    font-style: italic;
+  }
+  .photo-frame img {
+    width: 260px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+  }
+  .photo-gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 25px; }
+
+  /* Cake */
+  .cake-container { position: relative; margin: 40px 0; }
+  .cake {
+    width: 220px;
+    height: 140px;
+    background: linear-gradient(#8d5524, #6b3f1c);
+    border-radius: 12px 12px 8px 8px;
+    position: relative;
+    margin: 0 auto;
+  }
+  .cake::before {
+    content: '';
+    position: absolute;
+    top: -18px; left: 0; right: 0; height: 30px;
+    background: radial-gradient(circle at 20% 50%, #ffb6c1 0 10px, transparent 11px),
+                radial-gradient(circle at 50% 50%, #fff 0 10px, transparent 11px),
+                radial-gradient(circle at 80% 50%, #ffb6c1 0 10px, transparent 11px);
+    background-size: 60px 30px;
+    border-radius: 50px 50px 0 0;
+  }
+  .candle {
+    position: absolute;
+    width: 10px; height: 40px;
+    background: repeating-linear-gradient(45deg, #ff6fa5, #ff6fa5 5px, #fff 5px, #fff 10px);
+    top: -55px; left: 50%; transform: translateX(-50%);
+    border-radius: 3px;
+  }
+  .flame {
+    position: absolute;
+    width: 16px; height: 24px;
+    background: radial-gradient(circle at 50% 70%, #ffeb3b, #ff9800, #ff5722);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    top: -24px; left: 50%; transform: translateX(-50%);
+    animation: flicker 0.4s infinite alternate;
+    box-shadow: 0 0 20px #ff9800;
+  }
+  @keyframes flicker {
+    from { transform: translateX(-50%) scale(1) rotate(-3deg); }
+    to { transform: translateX(-50%) scale(1.15) rotate(3deg); }
+  }
+  .smoke {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: #bbb;
+    border-radius: 50%;
+    top: -30px; left: 50%;
+    animation: smokeUp 2s forwards;
+  }
+  @keyframes smokeUp {
+    to { transform: translate(-50%, -60px) scale(3); opacity: 0; }
+  }
+
+  /* Gift selection */
+  .gift-options { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin-top: 40px; }
+  .gift-box {
+    width: 150px; height: 150px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4em;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative;
+    animation: floatGift 3s ease-in-out infinite;
+  }
+  .gift-box:nth-child(2) { animation-delay: 0.5s; }
+  .gift-box:nth-child(3) { animation-delay: 1s; }
+  @keyframes floatGift {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+  .gift-box:hover { transform: scale(1.15) rotate(-5deg); box-shadow: 0 15px 40px rgba(233,30,99,0.4); }
+  .gift-1 { background: linear-gradient(135deg, #ffd1dc, #ffafcc); }
+  .gift-2 { background: linear-gradient(135deg, #c8e6c9, #a5d6a7); }
+  .gift-3 { background: linear-gradient(135deg, #ffe082, #ffcc80); }
+
+  .letter {
+    background: #fffdf5;
+    border: 2px dashed #ff6fa5;
+    border-radius: 18px;
+    padding: 35px 30px;
+    max-width: 620px;
+    margin: 20px auto;
+    box-shadow: 0 12px 40px rgba(233,30,99,0.2);
+    text-align: left;
+    line-height: 1.9;
+    font-size: 1.08em;
+    color: #6d4c41;
+    animation: fadeIn 1s ease;
+  }
+  .letter p { color: #6d4c41; margin: 8px 0; }
+
+  .cap-cat {
+    font-size: 6em;
+    animation: bounceCat 2s infinite;
+    display: inline-block;
+    margin: 10px;
+  }
+  @keyframes bounceCat {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+  }
+
+  .balloon {
+    font-size: 3em;
+    display: inline-block;
+    animation: sway 3s ease-in-out infinite;
+  }
+  .balloon:nth-child(2) { animation-delay: 0.3s; }
+  .balloon:nth-child(3) { animation-delay: 0.6s; }
+  @keyframes sway {
+    0%,100% { transform: rotate(-8deg); }
+    50% { transform: rotate(8deg); }
+  }
+
+  .back-btn {
+    position: fixed;
+    top: 20px; left: 20px;
+    background: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    font-size: 0.95em;
+    z-index: 100;
+    color: #e91e63;
+    font-weight: bold;
+  }
+  .back-btn:hover { background: #ffe4ec; }
+
+  .sparkle-title {
+    font-size: 3em;
+    color: #e91e63;
+    animation: sparkle 1.5s infinite alternate;
+    text-shadow: 0 0 20px #ffafcc, 0 0 40px #ff6fa5;
+  }
+  @keyframes sparkle {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 1.6em; }
+    .photo-frame img { width: 200px; height: 230px; }
+    .gift-box { width: 110px; height: 110px; font-size: 3em; }
+    .gift-options { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating background emojis -->
+<div id="floaters"></div>
+
+<!-- ============ PAGE 1: First Home Page ============ -->
+<div class="page active" id="page1">
+  <div style="font-size:5em; animation:bounceIn 1s ease;">🎁</div>
+  <h1>I made something for you <3</h1>
+  <p>Your special day deserves something special...</p>
+  <p style="font-weight:bold; color:#e91e63; font-size:1.3em;">Do you want to see?? 👀</p>
+  <div class="btn-row">
+    <button class="btn btn-yes" onclick="showPage('page2')">Yes 💖</button>
+    <button class="btn btn-no" onclick="tryAgain()">No 🙈</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 2: Try Again (only via No) ============ -->
+<div class="page" id="pageTryAgain">
+  <div style="font-size:5em;">🥺</div>
+  <h1>Please try again...</h1>
+  <p>You have to say yes, this is made <b>just for you</b> 🥹💖</p>
+  <div class="btn-row">
+    <button class="btn btn-yes" onclick="showPage('page2')">Yes 💖</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 3: Happy Birthday Artist ============ -->
+<div class="page" id="page2">
+  <h1 class="sparkle-title">Happy Birthday Artist 🎂🥳💖🧿🌷</h1>
+  <div class="photo-gallery">
+    <div class="photo-frame" data-caption="Always shining ✨"><img src="images/photo1.png" alt="photo1"></div>
+  </div>
+  <div style="font-size:3em; margin-top:10px;">🎨🎭🎉</div>
+  <div class="btn-row" style="margin-top:25px;">
+    <button class="btn btn-yes" onclick="showPage('pageCake')">Next ➡️</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 4: Blow out the candles ============ -->
+<div class="page" id="pageCake">
+  <h1>Blow out the candles !!! 🎂</h1>
+  <div class="cake-container">
+    <div class="cake">
+      <div class="candle">
+        <div class="flame" id="flame"></div>
+      </div>
+    </div>
+  </div>
+  <p>Click the flame to blow it out 🌬️</p>
+  <button class="btn btn-yes" id="blowBtn" onclick="blowCandle()">Blow the candle 🌬️</button>
+  <button class="btn btn-yes" id="nextCake" style="display:none;" onclick="showPage('pageBDay')">Next ➡️</button>
+</div>
+
+<!-- ============ PAGE 5: Happy Birthday (3-4 photos) ============ -->
+<div class="page" id="pageBDay">
+  <h1 class="sparkle-title">Happy Birthday 🎂🫀</h1>
+  <div class="photo-gallery">
+    <div class="photo-frame" data-caption="My robot 🤖"><img src="images/photo2.jpeg" alt="p1"></div>
+    <div class="photo-frame" data-caption="So special 💖"><img src="images/photo3.jpeg" alt="p2"></div>
+    <div class="photo-frame" data-caption="Shine on ✨"><img src="images/photo4.jpeg" alt="p3"></div>
+    <div class="photo-frame" data-caption="Forever 🧿"><img src="images/photo5.jpeg" alt="p4"></div>
+  </div>
+  <div class="btn-row" style="margin-top:25px;">
+    <button class="btn btn-yes" onclick="showPage('pageGifts')">Next ➡️</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 6: Accept your gifts (cat with cap) ============ -->
+<div class="page" id="pageGifts">
+  <h1>Accept your gifts 🎁</h1>
+  <div class="cap-cat">🐱🎩</div>
+  <p>Your little friend is waiting with a surprise...</p>
+  <div class="btn-row">
+    <button class="btn btn-yes" onclick="showPage('pageChooseGift')">Yes 💖</button>
+    <button class="btn btn-no" onclick="showPage('pageGifts')">No 🙈</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 7: Choose your gift ============ -->
+<div class="page" id="pageChooseGift">
+  <h1>Yay! Choose your gift 🎀</h1>
+  <div class="cap-cat">🐱🎩</div>
+  <div class="gift-options">
+    <div class="gift-box gift-1" onclick="showPage('pageLetter')">
+      <div style="text-align:center;">
+        <div style="font-size:0.6em; margin-bottom:-10px;">✉️</div>
+        <div style="font-size:0.35em; color:#b03a68; font-weight:bold;">Gift 1</div>
+      </div>
+    </div>
+    <div class="gift-box gift-2" onclick="showPage('pageFlowers')">
+      <div style="text-align:center;">
+        <div style="font-size:0.6em; margin-bottom:-10px;">💐</div>
+        <div style="font-size:0.35em; color:#2e7d32; font-weight:bold;">Gift 2</div>
+      </div>
+    </div>
+    <div class="gift-box gift-3" onclick="showPage('pageBox')">
+      <div style="text-align:center;">
+        <div style="font-size:0.6em; margin-bottom:-10px;">🎁</div>
+        <div style="font-size:0.35em; color:#e65100; font-weight:bold;">Gift 3</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE 8: Gift 1 – Letter ============ -->
+<div class="page" id="pageLetter">
+  <h1>💌 A Letter For You</h1>
+  <div class="letter">
+    <p>Myyy dear rohan,</p>
+    <p>Wise you a many many happy returns of the day dear robot 🤖🌷</p>
+    <p>Aaje taro bday bov j special day che yarrrrrrrr 🧿💖 God always protect you.</p>
+    <p>Kai words ma samjavu yarrr tane hu mari feeling ne badhu yarrr i really really yarrrrr......</p>
+    <p>Happiness birthday to you dear my robot 🤖🧿💖🌷</p>
+    <p>Tari badhu wishes puri thai Robot 🤖</p>
+    <p style="text-align:right; margin-top:20px; font-weight:bold;">— With lots of love 💖</p>
+  </div>
+  <div class="cap-cat" style="font-size:4em;">🐱🎂</div>
+  <div class="btn-row" style="margin-top:20px;">
+    <button class="btn btn-yes" onclick="showPage('pageChooseGift')">⬅️ Back to gifts</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 9: Gift 2 – Flowers ============ -->
+<div class="page" id="pageFlowers">
+  <h1>💐 Some flowers for you</h1>
+  <div class="cap-cat">🐱💐🎩</div>
+  <div class="photo-gallery">
+    <div class="photo-frame" data-caption="Flowers 🌷"><img src="images/photo6.png" alt="f1"></div>
+    <div class="photo-frame" data-caption="For you 💖"><img src="images/photo7.jpeg" alt="f2"></div>
+    <div class="photo-frame" data-caption="With love 🧿"><img src="images/photo8.jpeg" alt="f3"></div>
+  </div>
+  <p style="font-size:1.3em; color:#e91e63; font-weight:bold; margin-top:20px;">Some flowers for you 🌷</p>
+  <div class="btn-row" style="margin-top:20px;">
+    <button class="btn btn-yes" onclick="showPage('pageChooseGift')">⬅️ Back to gifts</button>
+    <button class="btn btn-yes" onclick="showPage('pageBirthdayBoy')">Next ➡️</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 10: Birthday Boy quote page ============ -->
+<div class="page" id="pageBirthdayBoy">
+  <h1>🎂 Birthday Boy 🎂</h1>
+  <div style="font-size:3em; margin:10px;">🎈🎉🎊🎈</div>
+  <div class="letter" style="text-align:center;">
+    <p style="font-size:1.3em; color:#e91e63; font-weight:bold;">"You have day of making ordinary moments feel special" ✨</p>
+  </div>
+  <div class="photo-gallery">
+    <div class="photo-frame" data-caption="Special moments 💖"><img src="images/photo9.jpeg" alt="bb1"></div>
+    <div class="photo-frame" data-caption="Birthday boy 🎂"><img src="images/photo10.jpeg" alt="bb2"></div>
+  </div>
+  <div class="btn-row" style="margin-top:25px;">
+    <button class="btn btn-yes" onclick="showPage('pageFinal')">Final Surprise 🎁</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 11: Gift 3 – Box (final) ============ -->
+<div class="page" id="pageBox">
+  <h1>🎁 Surprise!</h1>
+  <div class="gift-open">🎁✨</div>
+  <p style="font-size:1.4em; color:#e91e63; font-weight:bold;">This box holds all my love, wishes and blessings for you 💖</p>
+  <p>May all your dreams come true, dear Robot 🤖🧿</p>
+  <div class="balloon">🎈</div><div class="balloon">🎈</div><div class="balloon">🎈</div>
+  <div class="btn-row" style="margin-top:20px;">
+    <button class="btn btn-yes" onclick="showPage('pageFinal')">Final Surprise 🎁</button>
+  </div>
+</div>
+
+<!-- ============ FINAL PAGE ============ -->
+<div class="page" id="pageFinal">
+  <div class="balloon">🎈</div><div class="balloon">🎈</div><div class="balloon">🎈</div>
+  <h1 class="sparkle-title">Happy Birthday Rohan! 🎂🥳💖🧿🌷</h1>
+  <div class="cap-cat" style="font-size:5em;">🐱🎩🎂</div>
+  <p style="font-size:1.3em; color:#e91e63; font-weight:bold;">You are so special, always stay happy 💖</p>
+  <p>🧿 Many many happy returns of the day 🧿</p>
+  <div style="font-size:2.5em; margin:15px;">🎉🎊🎂🎁💐💖</div>
+  <div class="btn-row" style="margin-top:25px;">
+    <button class="btn btn-yes" onclick="showPage('page1')">Start Over 🔄</button>
+  </div>
+</div>
+
+<script>
+  // ---------- Page navigation ----------
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById(id);
+    if (page) {
+      page.classList.add('active');
+      window.scrollTo(0, 0);
+      // Show back button on pages after page 1
+      const backBtn = document.getElementById('backBtn');
+      if (backBtn) backBtn.style.display = (id === 'page1') ? 'none' : 'block';
+    }
+  }
+
+  // ---------- "No" button on page 1 → try again page ----------
+  function tryAgain() {
+    showPage('pageTryAgain');
+  }
+
+  // ---------- Blow out candle ----------
+  function blowCandle() {
+    const flame = document.getElementById('flame');
+    const candle = flame.parentElement;
+    if (flame) {
+      // Create smoke puffs
+      for (let i = 0; i < 5; i++) {
+        const smoke = document.createElement('div');
+        smoke.className = 'smoke';
+        smoke.style.left = '50%';
+        smoke.style.top = '-30px';
+        smoke.style.animationDelay = (i * 0.15) + 's';
+        candle.appendChild(smoke);
+      }
+      flame.style.display = 'none';
+      document.getElementById('blowBtn').style.display = 'none';
+      document.getElementById('nextCake').style.display = 'inline-block';
+    }
+  }
+
+  // ---------- Floating background emojis ----------
+  const emojis = ['💖','🎈','🌸','✨','🧿','🎀','🌷','💐','🎂'];
+  const floaters = document.getElementById('floaters');
+  function spawnFloater() {
+    const el = document.createElement('div');
+    el.className = 'float-emoji';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (6 + Math.random() * 8) + 's';
+    el.style.fontSize = (18 + Math.random() * 22) + 'px';
+    floaters.appendChild(el);
+    setTimeout(() => el.remove(), 15000);
+  }
+  setInterval(spawnFloater, 700);
+
+  // ---------- Back button (dynamic) ----------
+  const backBtn = document.createElement('button');
+  backBtn.id = 'backBtn';
+  backBtn.className = 'back-btn';
+  backBtn.textContent = '⬅️ Back';
+  backBtn.style.display = 'none';
+  backBtn.onclick = () => {
+    // Simple back to previous main flow page
+    const activePage = document.querySelector('.page.active');
+    if (!activePage) return;
+    const id = activePage.id;
+    const backMap = {
+      'page2': 'page1',
+      'pageTryAgain': 'page1',
+      'pageCake': 'page2',
+      'pageBDay': 'pageCake',
+      'pageGifts': 'pageBDay',
+      'pageChooseGift': 'pageGifts',
+      'pageLetter': 'pageChooseGift',
+      'pageFlowers': 'pageChooseGift',
+      'pageBox': 'pageChooseGift',
+      'pageBirthdayBoy': 'pageFlowers',
+      'pageFinal': 'pageChooseGift'
+    };
+    showPage(backMap[id] || 'page1');
+  };
+  document.body.appendChild(backBtn);
+</script>
+</body>
+</html>
